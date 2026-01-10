@@ -4,7 +4,7 @@ import React from 'react'
 
 const Page = () => {
   return (
-    <div className='max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-10 lg:mt-15 gap-5 px-5'>
+    <div className='max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-7 lg:mt-12 gap-5 px-5'>
       <div className="badge badge-soft badge-info text-sm lg:text-lg flex items-center gap-2"><Sparkles className='size-4'/>New: Advanced ATS Scanning</div>
 
       <h1 className='text-center font-bold text-2xl md:text-4xl lg:text-5xl'>Optimized Your Resume in <br /> <span className='text-blue-600'>Seconds</span> with AI</h1>
@@ -15,7 +15,7 @@ const Page = () => {
       {/* File Input */}
       <div className='max-w-3xl w-full p-5  rounded-xl' style={{ boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)' }}>
         <div className="flex items-center justify-center w-full">
-          <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-base cursor-pointer hover:bg-neutral-tertiary-medium bg-gray-100">
+          <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-base cursor-pointer hover:bg-gray-200 bg-gray-100 rounded-lg">
               <div className="flex flex-col items-center justify-center text-body pt-5 pb-6">
                   <p className="mb-2 text-lg lg:text-xl font-bold">Drag & Drop your Resume Here</p>
                   <p className="text-md text-gray-500">Supports PDF, Docs up to 10mb</p>
