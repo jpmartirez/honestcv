@@ -1,3 +1,5 @@
+'use client'
+
 import Brands from '@/components/Brands'
 import { ALargeSmall, Check, Sparkles, UserRoundSearch } from 'lucide-react'
 import { useState } from 'react'
@@ -5,7 +7,7 @@ import { useState } from 'react'
 const Page = () => {
   const [file, setFile] = useState<File | null>(null)
 
-  
+
 
   return (
     <div className='max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-7 lg:mt-12 gap-5 px-5'>
