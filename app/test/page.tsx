@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from "react"
+import toast from "react-hot-toast"
 
 const TestPage = () => {
     const [file, setFile] = useState<File | null>(null)
 
     const handleSubmit = async () => {
-        if (!file) return alert("Select a PDF");
+        if (!file) return toast.error("Select a PDF");
 
         const formData = new FormData();
         formData.append("file", file);

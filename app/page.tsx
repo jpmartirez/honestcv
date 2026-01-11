@@ -1,17 +1,37 @@
 'use client'
 
 import Brands from '@/components/Brands'
-import { ALargeSmall, Check, Sparkles, UserRoundSearch } from 'lucide-react'
-import { useState } from 'react'
+import { ALargeSmall, ArrowUp, Check, Plus, Sparkles, UserRoundSearch } from 'lucide-react'
+import { useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 
 const Page = () => {
   const [file, setFile] = useState<File | null>(null)
+  const [jobDescription, setJobDescription] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement | null >(null)
 
+
+  const handleSubmit = async () => {
+        if (!file) return toast.error("Select a PDF ");
+        if (jobDescription === "") return toast.error("Indicate your job description");
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append('jobDescription', "Frontend Developer with React and Typescript")
+
+        const res = await fetch('/api/analyze', {
+            method: 'POST',
+            body: formData
+        })
+
+        const data = await res.json();
+        console.log(data)
+    }
 
 
   return (
     <div className='max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-7 lg:mt-12 gap-5 px-5'>
-      <div className="badge badge-soft badge-info text-sm lg:text-lg flex items-center gap-2"><Sparkles className='size-4'/>New: Advanced ATS Scanning</div>
+      <div className="badge badge-soft badge-info text-sm lg:text-md flex items-center gap-2"><Sparkles className='size-4'/>New: Advanced ATS Scanning</div>
 
       <h1 className='text-center font-bold text-2xl md:text-4xl lg:text-5xl'>Optimized Your Resume in <br /> <span className='text-blue-600'>Seconds</span> with AI</h1>
 
@@ -19,16 +39,52 @@ const Page = () => {
 
 
       {/* File Input */}
-      <div className='max-w-3xl w-full p-5  rounded-xl' style={{ boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)' }}>
-        <div className="flex items-center justify-center w-full">
-          <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-base cursor-pointer hover:bg-gray-200 bg-gray-100 rounded-lg">
-              <div className="flex flex-col items-center justify-center text-body pt-5 pb-6">
-                  <p className="mb-2 text-lg lg:text-xl font-bold">Drag & Drop your Resume Here</p>
-                  <p className="text-md text-gray-500">Supports PDF, Docs up to 10mb</p>
-              </div>
-              
-              <input id="dropzone-file" type="file" className="hidden" />
-          </label>
+      <div className='max-w-3xl w-full p-5 ' >
+        <div className="max-w-2xl w-full rounded-xl overflow-hidden mt-4 mx-auto p-3 shadow-lg shadow-blue-200 bg-base-200" style={{ boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)' }}>
+                <textarea className="w-full p-3 pb-0 resize-none outline-none bg-transparent text-gray-700"
+                    placeholder="Tell us about your job description and upload your resume" rows={3} value={jobDescription} onChange={e=>setJobDescription(e.target.value)}></textarea>
+
+                    {file && (
+                      <div className="mt-3 px-3 flex items-center justify-between rounded-md bg-base-100 p-2 my-3">
+                        <div className="flex items-center gap-2 text-sm">
+                          📄 <span className="truncate max-w-xs">{file.name}</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setFile(null)
+                         
+
+                            if (fileInputRef.current) fileInputRef.current.value = ""
+                          }}
+                          className="text-xs text-red-600 cursor-pointer"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+
+                
+                <div className="flex items-center justify-between pb-3 px-3">
+                    <label htmlFor="dropzone-file"  className="flex items-center justify-center p-1 rounded-full size-6 btn btn-neutral"
+                        aria-label="Add">
+                        <Plus className='text-white'/>
+                        <input ref={fileInputRef} id="dropzone-file" type="file" className="hidden" accept='application/pdf' onChange={e => {
+                          const selectedFile = e.target.files?.[0]
+                          if (!selectedFile) return
+
+                          if (selectedFile.type !== "application/pdf") {
+                            toast.error("Only PDF files are allowed")
+                            return
+                          }
+
+                          setFile(selectedFile)
+                          
+                        }}/>
+                    </label >
+                    <button onClick={handleSubmit} className="flex items-center justify-center p-1 rounded size-6 btn btn-primary" aria-label="Send">
+                        <ArrowUp className='text-white'/>
+                    </button>
+                </div>
         </div>
 
         <div className='flex items-center justify-center gap-3 p-5 flex-wrap'>
