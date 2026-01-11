@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "react-hot-toast";
 
 
 const outfit = Outfit({
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body
         className={` ${outfit.className} antialiased`}
       >
+        <Toaster/>
         <Navbar/>
         {children}
       </body>
