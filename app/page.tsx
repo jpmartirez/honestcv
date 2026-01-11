@@ -1,8 +1,12 @@
 import Brands from '@/components/Brands'
 import { ALargeSmall, Check, Sparkles, UserRoundSearch } from 'lucide-react'
-import React from 'react'
+import { useState } from 'react'
 
 const Page = () => {
+  const [file, setFile] = useState<File | null>(null)
+
+  
+
   return (
     <div className='max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-7 lg:mt-12 gap-5 px-5'>
       <div className="badge badge-soft badge-info text-sm lg:text-lg flex items-center gap-2"><Sparkles className='size-4'/>New: Advanced ATS Scanning</div>
