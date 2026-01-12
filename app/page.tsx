@@ -1,6 +1,7 @@
 'use client'
 
 import Brands from '@/components/Brands'
+import Results from '@/components/Results'
 import { ALargeSmall, ArrowUp, Check, Plus, Sparkles, UserRoundSearch } from 'lucide-react'
 import { useRef, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -9,27 +10,51 @@ const Page = () => {
   const [file, setFile] = useState<File | null>(null)
   const [jobDescription, setJobDescription] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement | null >(null)
+  
+  const [result, setResult] = useState<string | null>(null)
+  const [loading, setLoading] =  useState<boolean>(false)
 
 
   const handleSubmit = async () => {
+        setLoading(true)
         if (!file) return toast.error("Select a PDF ");
         if (jobDescription === "") return toast.error("Indicate your job description");
 
         const formData = new FormData();
         formData.append("file", file);
-        formData.append('jobDescription', "Frontend Developer with React and Typescript")
+        formData.append('jobDescription', jobDescription)
 
         const res = await fetch('/api/analyze', {
             method: 'POST',
             body: formData
         })
 
+        if(!res.ok) {
+          setLoading(false)
+          toast.error("Please try again")
+        };
+
         const data = await res.json();
-        console.log(data)
+
+        if(!data.success) {
+          setLoading(false)
+          toast.error('Analysis Failed')
+        };
+        
+        setResult(data.editedText);
+        setLoading(false)
     }
 
+  if(loading) return <div className='min-h-[80vh] w-full flex justify-center items-center'>
+    <span className="loading loading-xl loading-spinner text-info"></span>
+  </div>
+
   return (
-    <div className='max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-7 lg:mt-12 gap-5 px-5'>
+    <>
+    {result ? (
+      <Results result={result}/>
+    ) : (
+      <div className='max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-7 lg:mt-12 gap-5 px-5'>
       <div className="badge badge-soft badge-info text-sm lg:text-md flex items-center gap-2"><Sparkles className='size-4'/>New: Advanced ATS Scanning</div>
 
       <h1 className='text-center font-bold text-2xl md:text-4xl lg:text-5xl'>Optimized Your Resume in <br /> <span className='text-blue-600'>Seconds</span> with AI</h1>
@@ -99,6 +124,8 @@ const Page = () => {
       </div>
 
     </div>
+    )}
+    </>
   )
 }
 

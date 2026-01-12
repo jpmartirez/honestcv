@@ -5,8 +5,6 @@ import { GoogleGenAI } from '@google/genai';
 import { NextResponse } from "next/server";
 const pdf = require('pdf-parse-new');
 
-import { nanoid } from 'nanoid';
-
 
 const client = new GoogleGenAI({});
 
@@ -56,7 +54,7 @@ export async function POST(req: Request) {
         "job_relevance": {
           "match_score": number, // 0-100 (How well does it fit the provided JD?)
           "missing_keywords": string[], // Keywords from JD missing in Resume
-          "analysis": string // Brief paragraph on fit
+          "analysis": string // Brief paragraph on fit. Make it 2 sentences
         },
         "overall_recommendations": string[] // 3-5 high-impact bullet points
       }
@@ -76,9 +74,9 @@ export async function POST(req: Request) {
 
             // Clean and Parse JSON
             const editedText =  text?.replace(/```json/g, "").replace(/```/g, "").trim() || "";
-            const analysis = JSON.parse(editedText)
             
-            return NextResponse.json({success: true, analysis})
+            
+            return NextResponse.json({success: true, editedText})
 
         
     } catch (error) {
